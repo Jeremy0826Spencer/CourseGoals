@@ -1,5 +1,6 @@
 package com.example.jwt;
 
+import com.example.models.CustomUserDetails;
 import com.example.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -23,13 +24,16 @@ public class JwtTokenProvider {
     private long jwtExpirationDate;
 
     public String generateToken(Authentication authentication){
-        String username = authentication.getName();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        int userId = userDetails.getId();
+        String username = userDetails.getUsername();
 
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + jwtExpirationDate);
 
         String token = Jwts.builder()
                 .setSubject(username)
+                .claim("userId", userId)
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
                 .signWith(key())
@@ -52,6 +56,14 @@ public class JwtTokenProvider {
                 .getBody();
         String username = claims.getSubject();
         return username;
+    }
+
+    public int getUserId(String token){
+        Jws<Claims> claims = Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token);
+        return claims.getBody().get("userId", Integer.class);
     }
 
     public boolean validateToken(String token){

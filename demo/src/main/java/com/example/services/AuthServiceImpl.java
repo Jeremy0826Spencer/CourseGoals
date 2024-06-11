@@ -12,6 +12,7 @@ import com.example.models.dtos.UserLoginDTO;
 import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,13 +43,30 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public String register(RegisterDTO registerDTO) {
-        if(userDAO.existsByUsername(registerDTO.getUsername())){
-            throw new EntityExistsException();
+    public ResponseEntity<String> register(RegisterDTO registerDTO) {
+        if(registerDTO.getUsername() == null || registerDTO.getUsername().isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Must Enter Username.");
         }
-
+        if(registerDTO.getFirstName() == null || registerDTO.getFirstName().isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Must Enter First Name.");
+        }
+        if(registerDTO.getLastName() == null || registerDTO.getLastName().isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Must Enter Last Name.");
+        }
+        if(registerDTO.getPassword() == null || registerDTO.getPassword().isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Must Enter Password.");
+        }
+        if(registerDTO.getEmail() == null || registerDTO.getEmail().isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Must Enter Email.");
+        }
+        if(userDAO.existsByUsername(registerDTO.getUsername())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username exists.");
+        }
         if(userDAO.existsByEmail(registerDTO.getEmail())){
-            throw new EntityExistsException();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email exists.");
+        }
+        if(registerDTO.getUsername() == null){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email exists.");
         }
         User user = new User();
         user.setUsername(registerDTO.getUsername());
@@ -66,7 +84,7 @@ public class AuthServiceImpl implements AuthService{
 
         userDAO.save(user);
 
-        return "User Registered Successfully.";
+        return ResponseEntity.ok("User Registered Successfully.");
     }
 
 

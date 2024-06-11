@@ -1,28 +1,12 @@
 package com.example.controllers;
 
 import com.example.models.CourseGoal;
-import com.example.services.GoalService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/API/V1/")
-@CrossOrigin
-public class GoalController {
-
-    private GoalService goalService;
-
-    @Autowired
-    public GoalController(GoalService goalService) {
-        this.goalService = goalService;
-    }
-
-    @GetMapping("/allGoals")
-    public ResponseEntity<List<CourseGoal>> getAllGoals(){
-        return ResponseEntity.ok(goalService.getAllGoals());
-    }
-
+public interface GoalController {
+    public ResponseEntity<List<CourseGoal>> getAllGoals();
+    public ResponseEntity<List<CourseGoal>> getGoalsForUser(@RequestHeader(name="Authorization") String token);
 }

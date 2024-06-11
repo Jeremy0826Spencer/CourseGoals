@@ -1,8 +1,8 @@
 package com.example.services;
 
 import com.example.daos.UserDAO;
+import com.example.models.CustomUserDetails;
 import com.example.models.User;
-import com.example.models.enums.RoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,8 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,7 +30,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         Set<GrantedAuthority> authorities = user.getRoles().stream()
                 .map((role -> new SimpleGrantedAuthority(role.getName())))
                 .collect(Collectors.toSet());
-        return new org.springframework.security.core.userdetails.User(
+        return new CustomUserDetails(
+                user.getId(),
                 usernameOrEmail,
                 user.getPassword(),
                 authorities
