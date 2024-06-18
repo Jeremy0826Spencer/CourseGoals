@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface GoalService {
     public List<CourseGoal> getAllGoals();
-    public List<CourseGoal> getGoalsForUser(int userId);
+    public List<CourseGoal> getGoalsForUser(String token);
 
 }

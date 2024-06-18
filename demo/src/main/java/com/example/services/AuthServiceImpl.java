@@ -6,11 +6,12 @@ import com.example.jwt.JwtAuthResponse;
 import com.example.jwt.JwtTokenProvider;
 import com.example.models.Role;
 import com.example.models.User;
-import com.example.models.dtos.OutgoingUserDTO;
 import com.example.models.dtos.RegisterDTO;
 import com.example.models.dtos.UserLoginDTO;
 import jakarta.persistence.EntityExistsException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,29 +45,11 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public ResponseEntity<String> register(RegisterDTO registerDTO) {
-        if(registerDTO.getUsername() == null || registerDTO.getUsername().isBlank()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Must Enter Username.");
-        }
-        if(registerDTO.getFirstName() == null || registerDTO.getFirstName().isBlank()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Must Enter First Name.");
-        }
-        if(registerDTO.getLastName() == null || registerDTO.getLastName().isBlank()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Must Enter Last Name.");
-        }
-        if(registerDTO.getPassword() == null || registerDTO.getPassword().isBlank()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Must Enter Password.");
-        }
-        if(registerDTO.getEmail() == null || registerDTO.getEmail().isBlank()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Must Enter Email.");
-        }
         if(userDAO.existsByUsername(registerDTO.getUsername())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username exists.");
+            throw new DataIntegrityViolationException("Username already exists.");
         }
         if(userDAO.existsByEmail(registerDTO.getEmail())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email exists.");
-        }
-        if(registerDTO.getUsername() == null){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email exists.");
+            throw new DataIntegrityViolationException("Email already exists.");
         }
         User user = new User();
         user.setUsername(registerDTO.getUsername());

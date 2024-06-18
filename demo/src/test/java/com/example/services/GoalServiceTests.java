@@ -3,17 +3,21 @@ package com.example.services;
 import com.example.daos.GoalDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 public class GoalServiceTests {
 
+    @Mock
     private GoalDAO goalDAO;
-    private GoalService goalService;
+    @InjectMocks
+    private GoalServiceImpl goalService;
 
     @BeforeEach
     public void setup(){
-        goalDAO = Mockito.mock(GoalDAO.class);
-        goalService = new GoalServiceImpl(goalDAO);
+        MockitoAnnotations.openMocks(this);
     }
     /*
     @Test

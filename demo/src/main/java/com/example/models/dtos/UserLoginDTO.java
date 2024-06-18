@@ -1,8 +1,12 @@
 package com.example.models.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class UserLoginDTO {
 
+    @NotBlank
     private String usernameOrEmail;
+    @NotBlank
     private String password;
 
     public UserLoginDTO() {

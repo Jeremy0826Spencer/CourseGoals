@@ -1,6 +1,5 @@
 package com.example.jwt;
 
-import jakarta.persistence.Column;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,11 +26,9 @@ public class JwtAuthResponse {
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
     }
-
     public String getRole() {
         return role;
     }
-
     public void setRole(String role) {
         this.role = role;
     }

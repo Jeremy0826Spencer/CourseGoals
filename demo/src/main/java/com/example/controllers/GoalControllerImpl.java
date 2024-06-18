@@ -30,9 +30,7 @@ public class GoalControllerImpl implements GoalController{
 
     @GetMapping("/user/getUserGoals")
     public ResponseEntity<List<CourseGoal>> getGoalsForUser(@RequestHeader (name="Authorization") String token){
-        String jwt = token.substring(7,token.length());
-        int userId = jwtTokenProvider.getUserId(jwt);
-        return ResponseEntity.ok(goalService.getGoalsForUser(userId));
+        return ResponseEntity.ok(goalService.getGoalsForUser(token));
     }
 
 }

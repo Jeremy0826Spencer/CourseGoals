@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,7 +39,7 @@ public class AuthServiceTests {
     }
 
     @Test
-    void tesRegisterSuccess(){
+    void testRegisterSuccess(){
         RegisterDTO registerDTO = new RegisterDTO();
         registerDTO.setUsername("testUser");
         registerDTO.setFirstName("John");
@@ -55,4 +57,39 @@ public class AuthServiceTests {
         verify(userDAO, times(1)).save(any(User.class));
         assertEquals(ResponseEntity.ok("User Registered Successfully."), response);
     }
+
+    @Test
+    void testRegisterUsernameExists(){
+        RegisterDTO registerDTO = new RegisterDTO();
+        registerDTO.setUsername("testUser");
+        registerDTO.setFirstName("John");
+        registerDTO.setLastName("Doe");
+        registerDTO.setEmail("email@email.com");
+        registerDTO.setPassword("pass");
+
+        when(userDAO.existsByUsername(registerDTO.getUsername())).thenReturn(true);
+
+        DataIntegrityViolationException violationException = new DataIntegrityViolationException("Username already exists.");
+        ResponseEntity<String> response = new ResponseEntity<>(violationException.getMessage(), HttpStatus.CONFLICT);
+        assertEquals(ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists."), response);
+        violationException = null;
+    }
+
+    @Test
+    void testRegisterEmailExists(){
+        RegisterDTO registerDTO = new RegisterDTO();
+        registerDTO.setUsername("testUser");
+        registerDTO.setFirstName("John");
+        registerDTO.setLastName("Doe");
+        registerDTO.setEmail("email@email.com");
+        registerDTO.setPassword("pass");
+
+        when(userDAO.existsByEmail(registerDTO.getEmail())).thenReturn(true);
+        DataIntegrityViolationException violationException = new DataIntegrityViolationException("Email already exists.");
+        ResponseEntity<String> response = new ResponseEntity<>(violationException.getMessage(), HttpStatus.CONFLICT);
+        assertEquals(ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists."), response);
+        violationException = null;
+
+    }
+
 }
