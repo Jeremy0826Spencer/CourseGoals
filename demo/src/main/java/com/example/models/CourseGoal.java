@@ -1,5 +1,6 @@
 package com.example.models;
 
+import com.example.models.dtos.GoalDTO;
 import com.example.models.enums.PrivacyEnum;
 import jakarta.persistence.*;
 
@@ -13,15 +14,17 @@ public class CourseGoal {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int goalId;
+    @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
     private String body;
+    @Column(nullable = false)
+    private PrivacyEnum privacy;
     @OneToMany(mappedBy = "goal", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notes> notes = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
     private User user;
-    @Column(nullable = false)
-    private PrivacyEnum privacy;
     public CourseGoal() {
     }
 
@@ -87,4 +90,5 @@ public class CourseGoal {
                 ", privacy=" + privacy +
                 '}';
     }
+
 }
