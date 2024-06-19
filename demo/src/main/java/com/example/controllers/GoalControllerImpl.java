@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/API/V1/goals")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class GoalControllerImpl implements GoalController{
 
     private GoalService goalService;

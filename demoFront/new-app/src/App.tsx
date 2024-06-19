@@ -1,15 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { CreateGoalCompnent } from './create-new-goal-component/CreateGoalComponent';
+import { LoginComponent } from './login-component/LoginComponent';
+import { RegisterComponent } from './register-component/RegisterComponent';
+
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<CreateGoalCompnent/>}/>
+          <Route path='/' element={<LoginComponent/>}/>
+          <Route path='/register' element={<RegisterComponent/>}/>
         </Routes>
       </BrowserRouter>
     </div>
