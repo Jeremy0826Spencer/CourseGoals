@@ -1,6 +1,7 @@
-import axios from "axios"
+import axios, { isAxiosError } from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { ToastContainer, toast } from "react-toastify";
 
 type Register = {username: string, password: string, firstName: string, lastName: string, email: string}
 
@@ -14,8 +15,13 @@ export const RegisterComponent:React.FC = () => {
     }
 
     const register = async () => {
-        const response = await axios.post("http://localhost:8080/API/V1/auth/register", registerCredentials)
-        console.log(response)
+        try{
+            await axios.post("http://localhost:8080/API/V1/auth/register", registerCredentials)
+        }catch(error) {
+            if(isAxiosError(error)) {
+                toast.error(JSON.stringify(error.response?.data));
+            }
+        } 
     }
 
     return(
@@ -27,6 +33,7 @@ export const RegisterComponent:React.FC = () => {
             <input type="text" placeholder="email" name="email" onChange={handleRegisterChange}/>
             <button onClick={register}>Register</button>
             <button onClick={() => navigate('/')}>Back To Login</button>
+            <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} /> 
         </div>
     )
 
