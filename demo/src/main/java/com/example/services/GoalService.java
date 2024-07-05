@@ -9,4 +9,5 @@ public interface GoalService {
     public List<GoalDTO> getAllGoals();
     public List<GoalDTO> getGoalsForUser(String token);
     String createGoal(String token, GoalDTO goal);
+    String deleteGoal(int goalId);
 }

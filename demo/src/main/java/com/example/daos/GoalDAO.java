@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface GoalDAO extends JpaRepository<CourseGoal, Integer> {
-    List<CourseGoal> findAllByUserId(int userId);
+    List<CourseGoal> findAllByUserId(Long userId);
 }

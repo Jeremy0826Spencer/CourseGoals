@@ -25,7 +25,7 @@ public class JwtTokenProvider {
 
     public String generateToken(Authentication authentication){
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        int userId = userDetails.getId();
+        Long userId = userDetails.getId();
         String username = userDetails.getUsername();
 
         Date currentDate = new Date();
@@ -58,12 +58,12 @@ public class JwtTokenProvider {
         return username;
     }
 
-    public int getUserId(String token){
+    public Long getUserId(String token){
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
                 .parseClaimsJws(token);
-        return claims.getBody().get("userId", Integer.class);
+        return claims.getBody().get("userId", Long.class);
     }
 
     public boolean validateToken(String token){

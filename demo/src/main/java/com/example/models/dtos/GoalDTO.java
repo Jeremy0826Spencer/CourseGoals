@@ -5,6 +5,8 @@ import com.example.models.enums.PrivacyEnum;
 import jakarta.validation.constraints.NotBlank;
 
 public class GoalDTO {
+
+    private int goalId;
     @NotBlank(message = "Must include title")
     private String title;
     @NotBlank(message = "Must include a description.")
@@ -13,12 +15,18 @@ public class GoalDTO {
     public GoalDTO() {
     }
 
-    public GoalDTO(String title, String body, PrivacyEnum privacyEnum) {
+    public GoalDTO(int goalId, String title, String body, PrivacyEnum privacyEnum) {
+        this.goalId = goalId;
         this.title = title;
         this.body = body;
         this.privacyEnum = privacyEnum;
     }
-
+    public int getGoalId() {
+        return goalId;
+    }
+    public void setGoalId(int goalId) {
+        this.goalId = goalId;
+    }
     public String getTitle() {
         return title;
     }
@@ -46,11 +54,14 @@ public class GoalDTO {
     @Override
     public String toString() {
         return "GoalDTO{" +
-                "title='" + title + '\'' +
+                "goalId=" + goalId +
+                ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
+                ", privacyEnum=" + privacyEnum +
                 '}';
     }
+
     public static GoalDTO convertToDTO(CourseGoal goal){
-        return new GoalDTO(goal.getTitle(), goal.getBody(), goal.getPrivacy());
+        return new GoalDTO(goal.getGoalId(), goal.getTitle(), goal.getBody(), goal.getPrivacy());
     }
 }

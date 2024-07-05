@@ -39,5 +39,10 @@ public class GoalControllerImpl implements GoalController{
     public ResponseEntity<String> createGoal(@Valid @RequestBody GoalDTO goal, @RequestHeader (name="Authorization") String token){
         return ResponseEntity.ok(goalService.createGoal(token, goal));
     }
+    @Override
+    @DeleteMapping("/user/{goalId}")
+    public ResponseEntity<String> deleteGoal(@PathVariable int goalId) {
+        return ResponseEntity.ok(goalService.deleteGoal(goalId));
+    }
 
 }
