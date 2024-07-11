@@ -43,9 +43,7 @@ public class GoalServiceImpl implements  GoalService{
 
     @Override
     public String createGoal(String token, GoalDTO goal) {
-        String jwt = token.substring(7,token.length());
-        Long userId = jwtTokenProvider.getUserId(jwt);
-        Optional<User> user = userDAO.findById(userId);
+        Optional<User> user = userDAO.findById(returnUserIdFromJWT(token));
         if(user.isEmpty()){
             throw new EntityNotFoundException("This user does not exist.");
         }
@@ -55,6 +53,11 @@ public class GoalServiceImpl implements  GoalService{
             throw new EntityNotFoundException("Goal not created.");
         }
         return "Goal has been created.";
+    }
+
+    //Takes the userid from jwt provided for use in get methods
+    public Long returnUserIdFromJWT(String token){
+        return jwtTokenProvider.getUserId(token.substring(7,token.length()));
     }
     @Override
     public String deleteGoal(int goalId) {

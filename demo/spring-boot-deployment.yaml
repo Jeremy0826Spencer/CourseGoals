@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot
+  template:
+    metadata:
+      labels:
+        app: springboot
+    spec:
+      containers:
+        - name: springboot
+          image: your-docker-hub-username/your-springboot-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/postgres
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA
+              value: trying
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: spring-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-config
+data:
+  application.properties: |
+    spring.application.name=demo
+
+    spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
+    spring.datasource.username=postgres
+    spring.datasource.password=password
+    spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+    spring.jpa.show-sql=true
+    spring.jpa.hibernate.ddl-auto=update
+
+    spring.jpa.properties.hibernate.default_schema=trying
+
+    #JWT Information
+    app.jwt-secret=F83B11F7BCB4F55EAFB58AC4B82417CDC0F0E2CFB55B474FD68EC5B56B02610D
+    app.jwt-expiration-milliseconds=1800000
