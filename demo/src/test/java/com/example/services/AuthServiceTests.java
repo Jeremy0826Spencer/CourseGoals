@@ -49,7 +49,7 @@ public class AuthServiceTests {
 
         when(userDAO.existsByUsername(registerDTO.getUsername())).thenReturn(false);
         when(userDAO.existsByEmail(registerDTO.getEmail())).thenReturn(false);
-        when(roleDAO.findByName("ROLE_USER")).thenReturn(new Role(2,"ROLE_USER"));
+        when(roleDAO.findByName("ROLE_USER")).thenReturn(new Role("ROLE_USER"));
         when(passwordEncoder.encode(registerDTO.getPassword())).thenReturn("encodedPassword");
 
         ResponseEntity<String> response = authService.register(registerDTO);

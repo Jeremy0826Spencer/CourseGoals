@@ -22,9 +22,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
+//This is the implementation class of the service for login and register
 @Service
 public class AuthServiceImpl implements AuthService{
 
@@ -43,31 +44,35 @@ public class AuthServiceImpl implements AuthService{
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    //Method used for register
     @Override
     public ResponseEntity<String> register(RegisterDTO registerDTO) {
+
+        throwProperDataIntegrityViolation(registerDTO);
+
+        User user = new User(registerDTO.getUsername(), passwordEncoder.encode(registerDTO.getPassword()), registerDTO.getFirstName(), registerDTO.getLastName(), registerDTO.getEmail());
+
+        setRolesForUser(user);
+
+        userDAO.save(user);
+
+        return ResponseEntity.ok("User Registered Successfully.");
+    }
+    //Sets the role to user
+    private void setRolesForUser(User user){
+        Set<Role> roles = new HashSet<>();
+        Role userRole = roleDAO.findByName("ROLE_USER");
+        roles.add(userRole);
+        user.setRoles(roles);
+    }
+    //Throws an exception with "Username already exists." if the username exists and "Email already exists." is the email exists.
+    private void throwProperDataIntegrityViolation(RegisterDTO registerDTO){
         if(userDAO.existsByUsername(registerDTO.getUsername())){
             throw new DataIntegrityViolationException("Username already exists.");
         }
         if(userDAO.existsByEmail(registerDTO.getEmail())){
             throw new DataIntegrityViolationException("Email already exists.");
         }
-        User user = new User();
-        user.setUsername(registerDTO.getUsername());
-        user.setFirstName(registerDTO.getFirstName());
-        user.setLastName(registerDTO.getLastName());
-        user.setEmail(registerDTO.getEmail());
-        user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-
-        Set<Role> roles = new HashSet<>();
-        Role userRole = roleDAO.findByName("ROLE_USER");
-        roles.add(userRole);
-
-
-        user.setRoles(roles);
-
-        userDAO.save(user);
-
-        return ResponseEntity.ok("User Registered Successfully.");
     }
 
 
@@ -89,11 +94,10 @@ public class AuthServiceImpl implements AuthService{
         String role = null;
         if(userOptional.isPresent()){
             User loggedInUser = userOptional.get();
-            Optional<Role> optionalRole = loggedInUser.getRoles().stream().findFirst();
+            Set<Role> roleSet = loggedInUser.getRoles();
 
-            if(optionalRole.isPresent()){
-                Role userRole = optionalRole.get();
-                role = userRole.getName();
+            if(isUserAdmin(roleSet)){
+                role = "ROLE_ADMIN";
             }
         }
 
@@ -102,5 +106,12 @@ public class AuthServiceImpl implements AuthService{
         jwtAuthResponse.setAccessToken(token);
 
         return jwtAuthResponse;
+    }
+
+    public boolean isUserAdmin(Set roleSet){
+        if(roleSet.contains("ROLE_ADMIN")){
+            return true;
+        }
+        return false;
     }
 }

@@ -32,11 +32,12 @@ export const RegisterComponent: React.FC = () => {
         "http://localhost:8080/API/V1/auth/register",
         registerCredentials
       );
+      navigate("/");
     } catch (error) {
       if (isAxiosError(error)) {
         toast.error(JSON.stringify(error.response?.data));
       }
-    }
+    }  
   };
 
   return (

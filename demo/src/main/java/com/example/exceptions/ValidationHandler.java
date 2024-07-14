@@ -30,7 +30,7 @@ public class ValidationHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex){
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists.");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
 }
