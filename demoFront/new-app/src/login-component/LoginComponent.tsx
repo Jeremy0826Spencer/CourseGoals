@@ -18,8 +18,15 @@ export const LoginComponent: React.FC = () => {
         loginCredentials
       );
       const token = response.data.accessToken;
+      const role = response.data.role;
       localStorage.setItem("auth", token);
-      navigate("/userGoals");
+      localStorage.setItem("role", response.data.role);
+      if (role === "ROLE_ADMIN") {
+        navigate("/admin");
+      } else {
+        navigate("/userGoals");
+      }
+      
     } catch (error) {
       if (isAxiosError(error)) {
         toast.error(JSON.stringify(error.response?.data));

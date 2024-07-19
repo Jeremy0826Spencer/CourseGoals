@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: demo
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: password
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: trying
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+app:
+  jwt-secret: F83B11F7BCB4F55EAFB58AC4B82417CDC0F0E2CFB55B474FD68EC5B56B02610D
+  jwt-expiration-milliseconds: 1800000

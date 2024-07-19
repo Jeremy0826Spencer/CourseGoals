@@ -108,9 +108,11 @@ public class AuthServiceImpl implements AuthService{
         return jwtAuthResponse;
     }
 
-    public boolean isUserAdmin(Set roleSet){
-        if(roleSet.contains("ROLE_ADMIN")){
-            return true;
+    public boolean isUserAdmin(Set<Role> roleSet){
+        for(Role role : roleSet) {
+            if("ROLE_ADMIN".equals(role.getName())){
+                return true;
+            }
         }
         return false;
     }
