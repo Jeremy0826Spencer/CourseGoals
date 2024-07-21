@@ -63,6 +63,7 @@ public class AuthServiceImpl implements AuthService{
         Set<Role> roles = new HashSet<>();
         Role userRole = roleDAO.findByName("ROLE_USER");
         roles.add(userRole);
+        user.setAccountLocked(false);
         user.setRoles(roles);
     }
     //Throws an exception with "Username already exists." if the username exists and "Email already exists." is the email exists.

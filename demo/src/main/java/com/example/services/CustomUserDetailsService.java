@@ -34,6 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 user.getId(),
                 usernameOrEmail,
                 user.getPassword(),
+                !user.isAccountLocked(),
                 authorities
         );
     }

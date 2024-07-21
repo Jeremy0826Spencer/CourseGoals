@@ -4,13 +4,16 @@ import com.example.daos.UserDAO;
 import com.example.jwt.JwtTokenProvider;
 import com.example.models.User;
 import com.example.models.dtos.ChangeProfileDTO;
+import com.example.models.dtos.OutgoingUserDTO;
 import com.example.models.dtos.ReturnProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -70,5 +73,35 @@ public class UserServiceImpl implements UserService{
             userDAO.deleteById(userId);
             return "User deleted successfully.";
         }else throw new DataIntegrityViolationException("Could not find user");
+    }
+
+    @Override
+    public List<OutgoingUserDTO> getAllAccounts() {
+        return userDAO.findAll().stream().map(OutgoingUserDTO::mapToOutUserDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public void lockAccount(Long userId) {
+        Optional<User> user = userDAO.findById(userId);
+        if (user.isPresent()) {
+            user.get().setAccountLocked(true);
+            userDAO.save(user.get());
+        }
+    }
+    @Override
+    public void toggleAccountLock(Long userId) {
+        Optional<User> user = userDAO.findById(userId);
+        if (user.isPresent()) {
+            user.get().setAccountLocked(!user.get().isAccountLocked());
+            userDAO.save(user.get());
+        }
+    }
+    @Override
+    public void unlockAccount(Long userId) {
+        Optional<User> user = userDAO.findById(userId);
+        if (user.isPresent()) {
+            user.get().setAccountLocked(false);
+            userDAO.save(user.get());
+        }
     }
 }

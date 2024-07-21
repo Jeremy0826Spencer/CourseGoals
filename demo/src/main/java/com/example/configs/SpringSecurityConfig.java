@@ -39,6 +39,8 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/API/V1/goals/user/**").hasRole("USER")
                         .requestMatchers("/API/V1/goals/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/API/V1/users/user/**").hasRole("USER")
+                        .requestMatchers("/API/V1/users/admin/**").hasRole("ADMIN")
                         .requestMatchers( "/API/V1/auth/**").permitAll()
                         .anyRequest().authenticated()
                 ).httpBasic(Customizer.withDefaults());
