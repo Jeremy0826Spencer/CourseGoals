@@ -48,13 +48,12 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public ResponseEntity<String> register(RegisterDTO registerDTO) {
 
+        //throws either username or email exists error message depending on if one exists
         throwProperDataIntegrityViolation(registerDTO);
 
         User user = new User(registerDTO.getUsername(), passwordEncoder.encode(registerDTO.getPassword()), registerDTO.getFirstName(), registerDTO.getLastName(), registerDTO.getEmail());
 
         setRolesForUser(user);
-
-        userDAO.save(user);
 
         return ResponseEntity.ok("User Registered Successfully.");
     }
@@ -65,6 +64,7 @@ public class AuthServiceImpl implements AuthService{
         roles.add(userRole);
         user.setAccountLocked(false);
         user.setRoles(roles);
+        userDAO.save(user);
     }
     //Throws an exception with "Username already exists." if the username exists and "Email already exists." is the email exists.
     private void throwProperDataIntegrityViolation(RegisterDTO registerDTO){

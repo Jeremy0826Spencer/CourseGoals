@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import com.example.models.dtos.ChangeProfileDTO;
+import com.example.models.dtos.FriendDTO;
 import com.example.models.dtos.OutgoingUserDTO;
 import com.example.models.dtos.ReturnProfileDTO;
 import com.example.services.UserService;
@@ -43,6 +44,12 @@ public class UserControllerImpl implements UserController   {
     public ResponseEntity<List<OutgoingUserDTO>> getAllAccounts() {
         return new ResponseEntity<>(userService.getAllAccounts(), HttpStatus.OK);
     }
+
+    @Override
+    @GetMapping("/user/users")
+    public ResponseEntity<List<FriendDTO>> getAllUsers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
     /*
     @Override
     @PatchMapping("/admin/{userId}/lock")
@@ -63,5 +70,17 @@ public class UserControllerImpl implements UserController   {
     public ResponseEntity<String> toggleAccount(@PathVariable Long userId) {
         userService.toggleAccountLock(userId);
         return new ResponseEntity<>("Account lock changed", HttpStatus.OK);
+    }
+
+    @Override
+    @PatchMapping("/user/{friendId}/friend")
+    public ResponseEntity<String> addFriend(@RequestHeader(name="Authorization") String token,@PathVariable Long friendId) {
+        return new ResponseEntity<>(userService.addFriend(token, friendId), HttpStatus.OK);
+    }
+
+    @Override
+    @GetMapping("/user/friends")
+    public ResponseEntity<List<FriendDTO>> friendsList(@RequestHeader(name = "Authorization") String token){
+        return new ResponseEntity<>(userService.getAllFriends(token), HttpStatus.OK);
     }
 }

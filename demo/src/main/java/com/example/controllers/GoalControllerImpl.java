@@ -2,6 +2,7 @@ package com.example.controllers;
 
 import com.example.jwt.JwtTokenProvider;
 import com.example.models.CourseGoal;
+import com.example.models.dtos.FriendGoalDTO;
 import com.example.models.dtos.GoalDTO;
 import com.example.services.GoalService;
 import jakarta.validation.Valid;
@@ -43,6 +44,11 @@ public class GoalControllerImpl implements GoalController{
     @DeleteMapping("/user/{goalId}")
     public ResponseEntity<String> deleteGoal(@PathVariable int goalId) {
         return ResponseEntity.ok(goalService.deleteGoal(goalId));
+    }
+
+    @GetMapping("/user/{userId}/friendsGoals")
+    public ResponseEntity<List<FriendGoalDTO>> getFriendsGoals(@PathVariable Long userId){
+        return ResponseEntity.ok(goalService.getGoalsForFriend(userId));
     }
 
 }
