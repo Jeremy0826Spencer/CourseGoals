@@ -12,6 +12,9 @@ import java.util.List;
 public interface UserService {
 
     ReturnProfileDTO getMyAccount(String token);
+
+    ReturnProfileDTO getUserAccount(Long userId);
+
     String updateWholeProfile(ChangeProfileDTO dto, String token);
     String deleteMyProfile(String token);
     List<OutgoingUserDTO> getAllAccounts();

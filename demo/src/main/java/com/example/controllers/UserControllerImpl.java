@@ -29,6 +29,11 @@ public class UserControllerImpl implements UserController   {
         return new ResponseEntity<>(userService.getMyAccount(token), HttpStatus.OK);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<ReturnProfileDTO> getFriendProfile(@PathVariable Long userId){
+        return new ResponseEntity<>(userService.getUserAccount(userId), HttpStatus.OK);
+    }
+
     @PutMapping("/user/myAccount")
     public  ResponseEntity<String> updateWholeProfile(@RequestBody ChangeProfileDTO dto, @RequestHeader(name="Authorization") String token){
         return new ResponseEntity<>(userService.updateWholeProfile(dto, token), HttpStatus.OK);

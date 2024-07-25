@@ -4,6 +4,7 @@ import React from "react";
 import Select from "react-select";
 import { ToastContainer, toast } from "react-toastify";
 import { FriendsGoalsComponent } from "./FriendsGoalsComponent";
+import { useNavigate } from "react-router-dom";
 
 type Goal = {
   goalId: number;
@@ -29,18 +30,8 @@ export const CreateGoalCompnent: React.FC = () => {
   const [accounts, setAccounts] = useState<User[]>([]);
   const [status, setStatus] = useState<string>("PUBLIC");
   const [friends, setFriends] = useState<User[]>([]);
-  const [isFriendGoalsOpen, setIsFriendGoalsOpen] = useState(false);
-  const [selectedFriendId, setSelectedFriendId] = useState<number | null>(null);
-
-  const openModal = (friendId: number) => {
-    setSelectedFriendId(friendId);
-    setIsFriendGoalsOpen(true);
-  };
-  const closeModal = () => {
-    setIsFriendGoalsOpen(false);
-    setSelectedFriendId(null);
-  };
   
+  const navigate = useNavigate()
 
   const options = [
     { value: "PUBLIC", label: "PUBLIC" },
@@ -262,10 +253,10 @@ export const CreateGoalCompnent: React.FC = () => {
                 </div>
                 <div>
                   <button
-                    onClick={() => openModal(f.userId)}
+                    onClick={() => navigate(`/friendProfile/${f.userId}`)}
                     className="bg-blue-500 text-white py-1 px-2 rounded mt-2 hover:bg-blue-700"
                   >
-                    Goals
+                    User Page
                   </button>
                 </div>
               </li>
@@ -281,13 +272,6 @@ export const CreateGoalCompnent: React.FC = () => {
           rtl={false}
         />
       </div>
-      {isFriendGoalsOpen && selectedFriendId !== null && (
-        <FriendsGoalsComponent
-          isOpen={isFriendGoalsOpen}
-          onClose={closeModal}
-          friendId={selectedFriendId}
-        />
-      )}
     </div>
   );
 }

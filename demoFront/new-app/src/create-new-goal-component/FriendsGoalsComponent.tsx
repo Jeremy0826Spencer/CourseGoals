@@ -1,12 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface ReviewModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children?: React.ReactNode;
   friendId: number;
 }
+
+type User = {
+  userId: number;
+  username: string;
+  numberOfPublicGoals: number;
+};
 
 type Goal = {
   goalId: number;
@@ -15,36 +19,60 @@ type Goal = {
 };
 
 export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
-  isOpen,
-  onClose,
   friendId
 }) => {
   const [goals, setGoals] = useState<Goal[]>([]);
+  const [profile, setProfile] = useState<User>();
+
+  const navigate = useNavigate();
+
+  const getFriendProfile = async () => {
+    const token: any = localStorage.getItem("auth");
+    const response = await axios.get(
+      `http://localhost:8080/API/V1/users/user/${friendId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    setProfile(response.data);
+  };
+
+  const fetchGoals = async () => {
+    const token: any = localStorage.getItem("auth");
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/API/V1/goals/user/${friendId}/friendGoals`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setGoals(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    if (isOpen) {
-      const fetchGoals = async () => {
-        const token: any = localStorage.getItem("auth");
-        try {
-          const response = await axios.get(
-            `http://localhost:8080/api/v1/users/${friendId}/goals`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          setGoals(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchGoals();
-    }
-  }, [isOpen, friendId]);
+    getFriendProfile();
+    fetchGoals();
+  }, [friendId]);
 
   return (
-    <div className="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div>
+      <ul className="mb-4 md:mb-0 md:mr-4 bg-white shadow-md rounded p-4 w-full md:w-auto space-y-4">
+        <li className="flex flex-col md:flex-row md:items-center">
+          <div className="font-semibold md:mr-2">Username:</div>
+          <div>{profile?.username}</div>
+        </li>
+        <li className="flex flex-col md:flex-row md:items-center">
+          <div className="font-semibold md:mr-2">Number of goals:</div>
+          <div>{profile?.numberOfPublicGoals}</div>
+        </li>
+      </ul>
       <div
         className="bg-white bg-cover bg-center p-6 rounded shadow-md w-full max-w-md md:mr-8 mb-8 md:mb-0"
         style={{ backgroundImage: "url('/books.jpg')" }}
@@ -65,7 +93,13 @@ export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
             </li>
           ))}
         </ul>
-        <button onClick={() => {onClose()}}>Close</button>
+        <button
+          onClick={() => {
+            navigate("/userGoals");
+          }}
+        >
+          Home
+        </button>
       </div>
     </div>
   );

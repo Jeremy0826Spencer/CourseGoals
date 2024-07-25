@@ -40,6 +40,15 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public ReturnProfileDTO getUserAccount(Long userId) {
+        Optional<User> user = userDAO.findById(userId);
+        if (user.isPresent()) {
+            return new ReturnProfileDTO(user.get().getUsername(), user.get().getFirstName(),
+                    user.get().getLastName(), user.get().getEmail());
+        }else throw new DataIntegrityViolationException("Could not find user.");
+    }
+
+    @Override
     public String updateWholeProfile(ChangeProfileDTO dto, String token) {
         Optional<User> optUser = userDAO.findById(getIdFromJWT(token));
         if((userDAO.existsByEmail(dto.getEmail()) && (!dto.getEmail().equals(optUser.get().getEmail())))){

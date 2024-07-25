@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import { LoginComponent } from "./login-component/LoginComponent";
 import { RegisterComponent } from "./register-component/RegisterComponent";
 import { CreateGoalCompnent } from "./create-new-goal-component/CreateGoalComponent";
@@ -8,6 +8,7 @@ import { Layout } from "./nav/Layout";
 import { UserProfile } from "./user-profile/UserProfile";
 import { AdminPage } from "./admin-page/AdminPage";
 import { ProtectedRoute } from "./admin-page/ProtectedRouteProps";
+import { FriendsGoalsComponent } from "./create-new-goal-component/FriendsGoalsComponent";
 
 function App() {
   return (
@@ -28,11 +29,25 @@ function App() {
                 />
               }
             />
+            <Route
+              path="/friendProfile/:friendId"
+              element={<FriendsGoalsComponentWrapper/>}
+            />
           </Routes>
         </Layout>
       </BrowserRouter>
     </div>
   );
 }
+
+const FriendsGoalsComponentWrapper = () => {
+  const { friendId } = useParams<{ friendId: string }>();
+
+  if (!friendId) {
+    return <div>Error: No friend ID provided.</div>;
+  }
+
+  return <FriendsGoalsComponent friendId={parseInt(friendId, 10)} />;
+};
 
 export default App;

@@ -46,7 +46,7 @@ public class GoalControllerImpl implements GoalController{
         return ResponseEntity.ok(goalService.deleteGoal(goalId));
     }
 
-    @GetMapping("/user/{userId}/friendsGoals")
+    @GetMapping("/user/{userId}/friendGoals")
     public ResponseEntity<List<FriendGoalDTO>> getFriendsGoals(@PathVariable Long userId){
         return ResponseEntity.ok(goalService.getGoalsForFriend(userId));
     }
