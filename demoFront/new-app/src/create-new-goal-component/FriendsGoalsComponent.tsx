@@ -1,22 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { User } from "../interfaces/UserInterface";
+import { Goal } from "../interfaces/GoalInterface";
 
 interface ReviewModalProps {
   friendId: number;
 }
-
-type User = {
-  userId: number;
-  username: string;
-  numberOfPublicGoals: number;
-};
-
-type Goal = {
-  goalId: number;
-  title: string;
-  body: string;
-};
 
 export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
   friendId
