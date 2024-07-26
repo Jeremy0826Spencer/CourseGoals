@@ -13,16 +13,18 @@ public class CourseGoal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int goalId;
+    private Long goalId;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
     private String body;
     @Column(nullable = false)
     private PrivacyEnum privacy;
-    @OneToMany(mappedBy = "goal", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "goal", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notes> notes = new ArrayList<>();
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "goal", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", nullable = false)
     private User user;
     public CourseGoal() {
@@ -35,7 +37,7 @@ public class CourseGoal {
         this.privacy = privacy;
     }
 
-    public int getGoalId() {
+    public Long getGoalId() {
         return goalId;
     }
 

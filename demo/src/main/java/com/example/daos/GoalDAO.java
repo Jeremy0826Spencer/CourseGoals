@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface GoalDAO extends JpaRepository<CourseGoal, Integer> {
+public interface GoalDAO extends JpaRepository<CourseGoal, Long> {
     List<CourseGoal> findAllByUserId(Long userId);
 }

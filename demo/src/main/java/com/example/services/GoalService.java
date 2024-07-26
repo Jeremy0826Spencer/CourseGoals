@@ -11,5 +11,5 @@ public interface GoalService {
     public List<GoalDTO> getGoalsForUser(String token);
     List<FriendGoalDTO> getGoalsForFriend(Long userId);
     String createGoal(String token, GoalDTO goal);
-    String deleteGoal(int goalId);
+    String deleteGoal(Long goalId);
 }

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class FriendGoalDTO {
 
-    private int goalId;
+    private Long goalId;
     @NotBlank(message = "Must include title")
     private String title;
     @NotBlank(message = "Must include a description.")
@@ -13,17 +13,17 @@ public class FriendGoalDTO {
     public FriendGoalDTO() {
     }
 
-    public FriendGoalDTO(int goalId, String title, String body) {
+    public FriendGoalDTO(Long goalId, String title, String body) {
         this.goalId = goalId;
         this.title = title;
         this.body = body;
     }
 
-    public int getGoalId() {
+    public Long getGoalId() {
         return goalId;
     }
 
-    public void setGoalId(int goalId) {
+    public void setGoalId(Long goalId) {
         this.goalId = goalId;
     }
 

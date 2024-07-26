@@ -69,7 +69,7 @@ public class GoalServiceImpl implements  GoalService{
         return jwtTokenProvider.getUserId(token.substring(7,token.length()));
     }
     @Override
-    public String deleteGoal(int goalId) {
+    public String deleteGoal(Long goalId) {
         goalDAO.deleteById(goalId);
         return "Goal deleted";
     }

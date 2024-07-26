@@ -13,5 +13,5 @@ public interface GoalController {
     public ResponseEntity<List<GoalDTO>> getAllGoals();
     public ResponseEntity<List<GoalDTO>> getGoalsForUser(@RequestHeader(name="Authorization") String token);
     public ResponseEntity<String> createGoal(@Valid @RequestBody GoalDTO goal, @RequestHeader (name="Authorization") String token);
-    public ResponseEntity<String> deleteGoal(int goalId);
+    public ResponseEntity<String> deleteGoal(Long goalId);
 }

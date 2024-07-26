@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "../interfaces/UserInterface";
 import { Goal } from "../interfaces/GoalInterface";
+import { Comment } from "../interfaces/CommentInterface";
+import { CommentOnGoalModal } from "./CommentOnGoalModal";
 
 interface ReviewModalProps {
   friendId: number;
@@ -13,6 +15,9 @@ export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
 }) => {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [profile, setProfile] = useState<User>();
+  const [comments, setComments] = useState<{ [key: number]: Comment[] }>({});
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState<boolean>(false);
+  const [selectedGoalId, setSelectedGoalId] = useState<number | null>(null);
 
   const navigate = useNavigate();
 
@@ -27,6 +32,22 @@ export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
       }
     );
     setProfile(response.data);
+  };
+
+  const getCommentsForGoal = async (goalId: number) => {
+    const token: any = localStorage.getItem("auth");
+    const response = await axios.get(
+      `http://localhost:8080/API/V1/comments/user/comments/${goalId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    setComments((prevComments) => ({
+      ...prevComments,
+      [goalId]: response.data,
+    }));
   };
 
   const fetchGoals = async () => {
@@ -51,6 +72,25 @@ export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
     fetchGoals();
   }, [friendId]);
 
+  useEffect(() => {
+    goals.forEach((goal) => {
+      getCommentsForGoal(goal.goalId);
+    });
+  }, [goals]);
+
+  const openCommentModal = (goalId: number) => {
+    setSelectedGoalId(goalId);
+    setIsCommentModalOpen(true);
+  };
+
+  const closeCommentModal = () => {
+    setIsCommentModalOpen(false);
+    setSelectedGoalId(null);
+    if (selectedGoalId) {
+      getCommentsForGoal(selectedGoalId); // Refresh comments after adding a new one
+    }
+  };
+
   return (
     <div>
       <ul className="mb-4 md:mb-0 md:mr-4 bg-white shadow-md rounded p-4 w-full md:w-auto space-y-4">
@@ -69,17 +109,35 @@ export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
       >
         <h2 className="text-xl mb-4">Goals</h2>
         <ul className="list-none p-0">
-          {goals.map((g) => (
+          {goals.map((goal) => (
             <li
-              key={g.goalId}
+              key={goal.goalId}
               className="mb-4 p-4 border border-gray-300 rounded bg-white shadow-sm"
             >
               <div className="mb-2">
-                <strong>Title:</strong> {g.title}
+                <strong>Title:</strong> {goal.title}
               </div>
               <div>
-                <strong>Body:</strong> {g.body}
+                <strong>Body:</strong> {goal.body}
               </div>
+              <button
+                onClick={() => openCommentModal(goal.goalId)}
+                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+              >
+                Add Comment
+              </button>
+              <ul className="list-none p-0 mt-4">
+                {comments[goal.goalId]?.map((comment) => (
+                  <li
+                    key={comment.commentId}
+                    className="mb-4 p-4 border border-gray-300 rounded bg-white shadow-sm"
+                  >
+                    <div>
+                      <strong>Comment:</strong> {comment.commentText}
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </li>
           ))}
         </ul>
@@ -90,7 +148,14 @@ export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
         >
           Home
         </button>
-      </div>
+        </div>
+      {isCommentModalOpen && selectedGoalId && (
+        <CommentOnGoalModal
+          isOpen={isCommentModalOpen}
+          onClose={closeCommentModal}
+          goalId={selectedGoalId}
+        />
+      )}
     </div>
   );
 };

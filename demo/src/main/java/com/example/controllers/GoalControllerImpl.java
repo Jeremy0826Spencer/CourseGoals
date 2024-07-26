@@ -42,7 +42,7 @@ public class GoalControllerImpl implements GoalController{
     }
     @Override
     @DeleteMapping("/user/{goalId}")
-    public ResponseEntity<String> deleteGoal(@PathVariable int goalId) {
+    public ResponseEntity<String> deleteGoal(@PathVariable Long goalId) {
         return ResponseEntity.ok(goalService.deleteGoal(goalId));
     }
 
