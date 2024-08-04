@@ -60,9 +60,6 @@ public class GoalServiceImpl implements  GoalService{
         goalDAO.save(new CourseGoal(goal.getTitle(), goal.getBody(), user.get(), goal.getPrivacyEnum()));
         return "Goal has been created.";
     }
-    private void saveGoal(){
-
-    }
     @Override
     public String deleteGoal(Long goalId) {
         Optional<CourseGoal> optGoal = goalDAO.findById(goalId);
@@ -82,12 +79,6 @@ public class GoalServiceImpl implements  GoalService{
     }
 
     private void removeFromUserAndDelete(User user, CourseGoal goal){
-        List<CourseGoal> goals = user.getCourseGoals();
-        goals.remove(goal);
-        goalDAO.delete(goal);
-    }
-
-    private void removeGoalFromUserAndDeleteGoal(User user, CourseGoal goal){
         List<CourseGoal> goals = user.getCourseGoals();
         goals.remove(goal);
         goalDAO.delete(goal);
