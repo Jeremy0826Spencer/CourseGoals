@@ -14,7 +14,11 @@ public class GoalDTO {
     private PrivacyEnum privacyEnum;
     public GoalDTO() {
     }
-
+    public GoalDTO(String title, String body, PrivacyEnum privacyEnum) {
+        this.title = title;
+        this.body = body;
+        this.privacyEnum = privacyEnum;
+    }
     public GoalDTO(Long goalId, String title, String body, PrivacyEnum privacyEnum) {
         this.goalId = goalId;
         this.title = title;

@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 @Service
 public class GoalServiceImpl implements  GoalService{
 
-    private GoalDAO goalDAO;
-    private JwtTokenProvider jwtTokenProvider;
-    private UserDAO userDAO;
+    final private GoalDAO goalDAO;
+    final private JwtTokenProvider jwtTokenProvider;
+    final private UserDAO userDAO;
 
     @Autowired
     public GoalServiceImpl(GoalDAO goalDAO, JwtTokenProvider jwtTokenProvider, UserDAO userDAO) {
@@ -36,7 +36,7 @@ public class GoalServiceImpl implements  GoalService{
 
     @Override
     public List<GoalDTO> getGoalsForUser(String token) {
-        String jwt = token.substring(7,token.length());
+        String jwt = token.substring(7);
         Long userId = jwtTokenProvider.getUserId(jwt);
         return goalDAO.findAllByUserId(userId).stream().map(GoalDTO::convertToDTO).collect(Collectors.toList());
     }
@@ -52,25 +52,44 @@ public class GoalServiceImpl implements  GoalService{
 
     @Override
     public String createGoal(String token, GoalDTO goal) {
-        Optional<User> user = userDAO.findById(returnUserIdFromJWT(token));
+        //calls the user DAO to find the user by id with the id extracted from the jwt from the request
+        Optional<User> user = userDAO.findById(jwtTokenProvider.getUserId(token.substring(7)));
         if(user.isEmpty()){
             throw new EntityNotFoundException("This user does not exist.");
         }
-        CourseGoal goalToSave = new CourseGoal(goal.getTitle(), goal.getBody(), user.get(), goal.getPrivacyEnum());
-        Optional<CourseGoal> optionalCourseGoal = Optional.of(goalDAO.save(goalToSave));
-        if(optionalCourseGoal.isEmpty()){
-            throw new EntityNotFoundException("Goal not created.");
-        }
+        goalDAO.save(new CourseGoal(goal.getTitle(), goal.getBody(), user.get(), goal.getPrivacyEnum()));
         return "Goal has been created.";
     }
+    private void saveGoal(){
 
-    //Takes the userid from jwt provided for use in get methods
-    public Long returnUserIdFromJWT(String token){
-        return jwtTokenProvider.getUserId(token.substring(7,token.length()));
     }
     @Override
     public String deleteGoal(Long goalId) {
-        goalDAO.deleteById(goalId);
-        return "Goal deleted";
+        Optional<CourseGoal> optGoal = goalDAO.findById(goalId);
+        if(optGoal.isPresent()) {
+            Optional<User> user = userDAO.findById(getUserIdFromGoal(optGoal.get()));
+            if(user.isPresent()) {
+                removeFromUserAndDelete(user.get(), optGoal.get());
+                return "Goal deleted";
+            }
+        }
+        return "Problem occurred.";
+    }
+
+    private Long getUserIdFromGoal(CourseGoal g){
+        User u = g.getUser();
+        return u.getId();
+    }
+
+    private void removeFromUserAndDelete(User user, CourseGoal goal){
+        List<CourseGoal> goals = user.getCourseGoals();
+        goals.remove(goal);
+        goalDAO.delete(goal);
+    }
+
+    private void removeGoalFromUserAndDeleteGoal(User user, CourseGoal goal){
+        List<CourseGoal> goals = user.getCourseGoals();
+        goals.remove(goal);
+        goalDAO.delete(goal);
     }
 }

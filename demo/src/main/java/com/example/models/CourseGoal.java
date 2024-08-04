@@ -37,6 +37,14 @@ public class CourseGoal {
         this.privacy = privacy;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
     public Long getGoalId() {
         return goalId;
     }

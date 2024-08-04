@@ -3,9 +3,10 @@ import { toast } from "react-toastify";
 import { Goal } from "../interfaces/GoalInterface";
 import { useState } from "react";
 import Select from "react-select";
-import { useNavigate } from "react-router-dom";
 
-export const CreateGoalFormComponent: React.FC = () => {
+export const CreateGoalFormComponent: React.FC<{ onGoalCreated: () => void }> = ({
+  onGoalCreated,
+}) => {
   const [status, setStatus] = useState<string>("PUBLIC");
   const [goal, setGoal] = useState<Goal>({
     goalId: 0,
@@ -27,6 +28,8 @@ export const CreateGoalFormComponent: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      toast.success("Goal created successfully!");
+      onGoalCreated();
     } catch (error) {
       if (isAxiosError(error)) {
         toast.error(JSON.stringify(error.response?.data));
