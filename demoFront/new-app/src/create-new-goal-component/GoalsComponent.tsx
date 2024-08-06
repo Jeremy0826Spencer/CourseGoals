@@ -1,11 +1,15 @@
 import { Goal } from "../interfaces/GoalInterface";
+import { Comment } from "../interfaces/CommentInterface";
 import axios, { isAxiosError } from "axios";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export const GoalsComponent: React.FC<{
   goals: Goal[];
   getAllGoalsForUser: () => void
 }> = ({ goals, getAllGoalsForUser }) => {
+
+  const [comments, setComments] = useState<{ [key: number]: Comment[] }>({});
 
   const deleteGoal = async (goalId?: number) => {
     const token: any = localStorage.getItem("auth");
@@ -23,6 +27,28 @@ export const GoalsComponent: React.FC<{
       }
     }
   };
+
+  const getCommentsForGoal = async (goalId: number) => {
+    const token: any = localStorage.getItem("auth");
+    const response = await axios.get(
+      `http://localhost:8080/API/V1/comments/user/comments/${goalId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    setComments((prevComments) => ({
+      ...prevComments,
+      [goalId]: response.data,
+    }));
+  };
+
+  useEffect(() => {
+    goals.forEach((goal) => {
+      getCommentsForGoal(goal.goalId);
+    });
+  }, [goals]);
 
   return (
     <div
@@ -50,6 +76,18 @@ export const GoalsComponent: React.FC<{
                 Delete
               </button>
             </div>
+            <ul className="list-none p-0 mt-4">
+              {comments[g.goalId]?.map((comment) => (
+                <li
+                  key={comment.commentId}
+                  className="mb-4 p-4 border border-gray-300 rounded bg-white shadow-sm"
+                >
+                  <div>
+                    <strong>Comment:</strong> {comment.commentText}
+                  </div>
+                </li>
+              ))}
+            </ul>
           </li>
         ))}
       </ul>

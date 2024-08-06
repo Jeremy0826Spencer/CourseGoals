@@ -3,7 +3,9 @@ import { User } from "../interfaces/UserInterface"
 import axios from "axios";
 
 
-export const PeopleYouMayKnowComponent: React.FC = () => {
+export const PeopleYouMayKnowComponent: React.FC<{onFriendAdded: () => void}> = ({
+  onFriendAdded,
+}) => {
     const [accounts, setAccounts] = useState<User[]>([]);
 
     const friend = async (userId: number) => {
@@ -17,6 +19,7 @@ export const PeopleYouMayKnowComponent: React.FC = () => {
           },
         }
       );
+      onFriendAdded();
     };
 
     const getAllUsers = async () => {

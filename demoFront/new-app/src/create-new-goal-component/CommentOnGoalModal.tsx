@@ -35,6 +35,7 @@ export const CommentOnGoalModal: React.FC<ReviewModalProps> = ({
     } catch (error) {
       console.error(error);
     }
+    onClose();
   };
 
   return (
