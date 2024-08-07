@@ -41,10 +41,7 @@ export const PeopleYouMayKnowComponent: React.FC<{onFriendAdded: () => void}> = 
 
     return (
       <div>
-        <div
-          className="bg-white bg-cover bg-center p-6 rounded shadow-md w-full max-w-md md:mr-8 mb-8 md:mb-0"
-          style={{ backgroundImage: "url('/books.jpg')" }}
-        >
+        <div className="bg-[#E2E2B6] bg-center p-6 rounded shadow-md w-full max-w-md md:mr-8 mb-8 md:mb-0">
           <h2 className="text-xl mb-4">People you may know</h2>
           <ul className="list-none p-0">
             {accounts.map((a) => (
@@ -61,7 +58,7 @@ export const PeopleYouMayKnowComponent: React.FC<{onFriendAdded: () => void}> = 
                 </div>
                 <div>
                   <button
-                    className="bg-green-500 text-white py-1 px-2 rounded mt-2 hover:bg-green-700"
+                    className="bg-[#6EACDA] text-white py-1 px-2 rounded mt-2 hover:bg-green-700"
                     onClick={() => friend(a.userId)}
                   >
                     Friend

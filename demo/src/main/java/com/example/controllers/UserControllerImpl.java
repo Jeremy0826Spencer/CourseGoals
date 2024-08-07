@@ -88,4 +88,9 @@ public class UserControllerImpl implements UserController   {
     public ResponseEntity<List<FriendDTO>> friendsList(@RequestHeader(name = "Authorization") String token){
         return new ResponseEntity<>(userService.getAllFriends(token), HttpStatus.OK);
     }
+
+    @DeleteMapping("/user/unfriend/{friendId}")
+    public ResponseEntity<String> unfriend(@RequestHeader(name = "Authorization") String token, @PathVariable Long friendId){
+        return new ResponseEntity<>(userService.removeFriend(token, friendId), HttpStatus.OK);
+    }
 }

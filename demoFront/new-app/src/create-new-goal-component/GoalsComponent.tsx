@@ -51,10 +51,7 @@ export const GoalsComponent: React.FC<{
   }, [goals]);
 
   return (
-    <div
-      className="bg-white bg-cover bg-center p-6 rounded shadow-md w-full max-w-md md:mr-8 mb-8 md:mb-0"
-      style={{ backgroundImage: "url('/books.jpg')" }}
-    >
+    <div className="bg-[#E2E2B6] bg-cover bg-center p-6 rounded shadow-md w-full max-w-md md:mr-8 mb-8 md:mb-0">
       <h2 className="text-xl mb-4">Goals</h2>
       <ul className="list-none p-0">
         {goals.map((g) => (
@@ -70,7 +67,7 @@ export const GoalsComponent: React.FC<{
             </div>
             <div>
               <button
-                className="bg-red-500 text-white py-1 px-2 rounded mt-2 hover:bg-red-700"
+                className="bg-[#021526] text-white py-1 px-2 rounded mt-2 hover:bg-red-700"
                 onClick={() => deleteGoal(g.goalId)}
               >
                 Delete

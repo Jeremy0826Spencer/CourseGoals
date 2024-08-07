@@ -92,8 +92,8 @@ export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
   };
 
   return (
-    <div>
-      <ul className="mb-4 md:mb-0 md:mr-4 bg-white shadow-md rounded p-4 w-full md:w-auto space-y-4">
+    <div className="bg-[#03346E] min-h-screen flex flex-col items-center justify-center">
+      <ul className="mb-4 md:mb-0 md:mr-4 bg-[#6EACDA] shadow-md rounded p-4 w-full md:w-auto space-y-4">
         <li className="flex flex-col md:flex-row md:items-center">
           <div className="font-semibold md:mr-2">Username:</div>
           <div>{profile?.username}</div>
@@ -103,10 +103,7 @@ export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
           <div>{profile?.numberOfPublicGoals}</div>
         </li>
       </ul>
-      <div
-        className="bg-white bg-cover bg-center p-6 rounded shadow-md w-full max-w-md md:mr-8 mb-8 md:mb-0"
-        style={{ backgroundImage: "url('/books.jpg')" }}
-      >
+      <div className="bg-white bg-cover bg-center p-6 rounded shadow-md w-full max-w-md md:mr-8 mb-8 md:mb-0">
         <h2 className="text-xl mb-4">Goals</h2>
         <ul className="list-none p-0">
           {goals.map((goal) => (
@@ -122,7 +119,7 @@ export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
               </div>
               <button
                 onClick={() => openCommentModal(goal.goalId)}
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                className="mt-2 px-4 py-2 bg-[#6EACDA] text-white rounded hover:bg-blue-600 transition-colors"
               >
                 Add Comment
               </button>
@@ -142,13 +139,14 @@ export const FriendsGoalsComponent: React.FC<ReviewModalProps> = ({
           ))}
         </ul>
         <button
+          className="mt-2 px-4 py-2 bg-[#6EACDA] text-white rounded hover:bg-blue-700"
           onClick={() => {
             navigate("/userGoals");
           }}
         >
           Home
         </button>
-        </div>
+      </div>
       {isCommentModalOpen && selectedGoalId && (
         <CommentOnGoalModal
           isOpen={isCommentModalOpen}

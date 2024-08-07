@@ -44,21 +44,26 @@ export const HomeComponent: React.FC = () => {
   }, []);
   
   return (
-    <div>
-      <div className="background-image min-h-screen flex flex-col md:flex-row items-start justify-center bg-gray-100 p-4">
-        <CreateGoalFormComponent onGoalCreated={fetchAllGoalsForUser}/>
-        <GoalsComponent goals={goals} getAllGoalsForUser={fetchAllGoalsForUser}/>
-        <PeopleYouMayKnowComponent onFriendAdded={fetchAllFriends}/>
-        <FriendsComponent friends={friends} getAllFriends={fetchAllFriends}/>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
+    <div className="bg-[#03346E] min-h-screen flex flex-col lg:flex-row items-start justify-center p-4">
+      <div className="w-full lg:w-2/3 flex flex-col items-start p-4">
+        <CreateGoalFormComponent onGoalCreated={fetchAllGoalsForUser} />
+        <GoalsComponent
+          goals={goals}
+          getAllGoalsForUser={fetchAllGoalsForUser}
         />
       </div>
+      <div className="w-full lg:w-1/3 flex flex-col items-start p-4">
+        <PeopleYouMayKnowComponent onFriendAdded={fetchAllFriends} />
+        <FriendsComponent friends={friends} getAllFriends={fetchAllFriends} />
+      </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+      />
     </div>
   );
 }

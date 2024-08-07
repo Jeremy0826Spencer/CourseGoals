@@ -68,13 +68,17 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String deleteMyProfile(String token) {
-        Optional<User> optionalUser = userDAO.findById(getIdFromJWT(token));
+        Long userId = getIdFromJWT(token);
+        Optional<User> optionalUser = userDAO.findById(userId);
         if(optionalUser.isPresent()) {
             User user =  optionalUser.get();
             user.getRoles().clear();
-            userDAO.save(user);
+            user.getCourseGoals().clear();
+            user.getFriends().clear();
 
-            userDAO.deleteById(user.getId());
+            userDAO.save(user);
+            userDAO.deleteById(userId);
+
             return "User deleted successfully.";
         }else throw new DataIntegrityViolationException("Could not find user");
     }
@@ -111,11 +115,6 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-    private Long getIdFromJWT(String token){
-        String jwt = token.substring(7, token.length());
-        return jwtTokenProvider.getUserId(jwt);
-    }
-
     @Override
     public String addFriend(String token, Long friendId) {
         User user = userDAO.findById(getIdFromJWT(token)).get();
@@ -146,5 +145,17 @@ public class UserServiceImpl implements UserService{
 
     private FriendDTO convertToFriendDTO(User user){
         return new FriendDTO(user.getId(), user.getUsername(), userDAO.countCourseGoalsByUserId(user.getId()));
+    }
+
+    @Override
+    public String removeFriend(String token, Long friendId){
+        Long userId = getIdFromJWT(token);
+        userDAO.deleteFriend(userId, friendId);
+        return "Unfriended";
+    }
+
+    private Long getIdFromJWT(String token){
+        String jwt = token.substring(7);
+        return jwtTokenProvider.getUserId(jwt);
     }
 }

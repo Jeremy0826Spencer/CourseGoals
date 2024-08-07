@@ -45,10 +45,7 @@ export const CreateGoalFormComponent: React.FC<{ onGoalCreated: () => void }> = 
   return (
     <div>
       <div className="flex flex-col space-y-2 w-full md:w-auto">
-        <div
-          className="bg-white bg-cover bg-center p-6 rounded shadow-md w-full max-w-md md:mr-8 mb-8 md:mb-0"
-          style={{ backgroundImage: "url('/books.jpg')" }}
-        >
+        <div className="bg-[#E2E2B6] bg-cover bg-center p-6 rounded shadow-md w-full max-w-md md:mr-8 mb-8 md:mb-0">
           <h1 className="text-2xl mb-4 text-center">Create Goal</h1>
           <input
             name="title"
@@ -76,7 +73,7 @@ export const CreateGoalFormComponent: React.FC<{ onGoalCreated: () => void }> = 
           />
           <button
             onClick={createGoal}
-            className="bg-blue-500 text-white py-2 px-4 rounded w-full mb-4 hover:bg-blue-700"
+            className="bg-[#6EACDA] text-white py-2 px-4 rounded w-full mb-4 hover:bg-blue-700"
           >
             Create Goal
           </button>

@@ -42,7 +42,7 @@ export const RegisterComponent: React.FC = () => {
 
   return (
     <div className=" background-image min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+      <div className="bg-[#E2E2B6] p-8 rounded shadow-md w-full max-w-md">
         <h1 className="text-2xl mb-6 text-center">Register</h1>
         <input
           type="text"
@@ -81,13 +81,13 @@ export const RegisterComponent: React.FC = () => {
         />
         <button
           onClick={register}
-          className="bg-blue-500 text-white py-2 px-4 rounded w-full mb-2 hover:bg-blue-700"
+          className="bg-[#03346E] text-white py-2 px-4 rounded w-full mb-2 hover:bg-blue-700"
         >
           Register
         </button>
         <button
           onClick={() => navigate("/")}
-          className="bg-gray-500 text-white py-2 px-4 rounded w-full hover:bg-gray-700"
+          className="bg-[#6EACDA] text-white py-2 px-4 rounded w-full hover:bg-gray-700"
         >
           Back To Login
         </button>

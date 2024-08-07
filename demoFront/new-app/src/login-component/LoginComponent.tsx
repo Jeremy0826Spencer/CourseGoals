@@ -41,8 +41,8 @@ export const LoginComponent: React.FC = () => {
 
   return (
     <div className="background-image min-h-screen flex items-center justify-center">
-      <div className="bg-white bg-opacity-80 p-8 rounded shadow-md">
-        <h1 className="text-2xl mb-4">Login</h1>
+      <div className="bg-[#E2E2B6] bg-opacity-80 p-8 rounded shadow-md">
+        <h1 className="text-2xl text-[#021526] mb-4">Login</h1>
         <input
           className="mb-4 p-2 border rounded w-full"
           type="text"
@@ -58,13 +58,13 @@ export const LoginComponent: React.FC = () => {
           onChange={handleLoginChange}
         />
         <button
-          className="bg-blue-500 text-white py-2 px-4 rounded w-full mb-2"
+          className="bg-[#03346E] text-white py-2 px-4 rounded w-full mb-2"
           onClick={login}
         >
           Login
         </button>
         <button
-          className="bg-gray-500 text-white py-2 px-4 rounded w-full"
+          className="bg-[#6EACDA] text-white py-2 px-4 rounded w-full"
           onClick={() => navigate("/register")}
         >
           Register

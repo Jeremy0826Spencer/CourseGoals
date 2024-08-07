@@ -25,4 +25,6 @@ public interface UserService {
 
     List<FriendDTO> getAllUsers();
     List<FriendDTO> getAllFriends(String token);
+
+    String removeFriend(String token, Long friendId);
 }
