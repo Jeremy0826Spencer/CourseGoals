@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
+//This is the interface for CommentControllerImpl
+//This interfaces implementation is used for comments made on a friends goals they post
 public interface CommentController {
 
     @PostMapping("/user/comment")

@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//This is the controller implementation for creating comments on other users goals.
+//It also can get the comments for a goal which is used in the front end to display comments in a
+//React map on each goal to show all of it's comments either in the users home page or on a friends page.
 @RestController
 @RequestMapping("/API/V1/comments")
 @CrossOrigin(origins = "http://localhost:3000")

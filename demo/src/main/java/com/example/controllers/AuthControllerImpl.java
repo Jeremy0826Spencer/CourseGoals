@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+//This is the implementation of the AuthController interface
+//This class has the AuthService class as a dependency
+//This class is used for logging in and registering a new user with user permissions
 @RestController
 @RequestMapping("/API/V1/auth")
 @CrossOrigin(origins = "http://localhost:3000")
